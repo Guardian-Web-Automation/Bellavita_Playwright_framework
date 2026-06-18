@@ -1,0 +1,30 @@
+# ── Node ────────────────────────────────────────────────────────
+node_modules/
+
+# ── OAuth / Credential files (NEVER commit these) ───────────────
+credentials.json
+token.json
+auth.json
+secrets.json
+*.key
+*.pem
+service-account*.json
+
+# ── Environment variables ────────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── Playwright test artifacts ────────────────────────────────────
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+reports/
+
+# ── OS / IDE ─────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

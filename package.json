@@ -1,0 +1,20 @@
+{
+  "name": "bellavita-mobileview_web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.9.2",
+    "dotenv": "^17.4.2"
+  },
+  "dependencies": {
+    "googleapis": "^173.0.0",
+    "open": "^8.4.2"
+  }
+}
