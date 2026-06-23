@@ -13,8 +13,8 @@ class ShopAll extends BasePage {
     // New locators for Shop All page tests
     this.productGridContainer = page.locator('//div[@id="ProductGridContainer"]');
     this.categoryPillsContainer = page.locator('//div[@class="plp-category-pills"]');
-    this.categoryTabButton = (tabName) => page.locator(`//div[@class="plp-category-pills"]/button[contains(text(),'${tabName}')]`);
-    this.activeTab = page.locator('//button[@class="plp-category-pill active"]');
+    this.categoryTabButton = (tabName) => page.locator(`//div[@class="plp-category-pills"]/button[contains(text(),"${tabName}")]`);
+    this.activeTab = (tabName) => page.locator(`//button[@class="plp-category-pill active" and contains(text(),"${tabName}")]`);
     this.productCards = page.locator('//li[@class="grid__item"]');
     this.bestsellerBadge = page.locator('//div[@class="plp-badge-bestseller"]//span[contains(text(),"BESTSELLER")]').first();
     this.soldOutButton = page.locator('//li[@class="grid__item"]//button[contains(translate(normalize-space(text()), "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"), "sold out")]');
@@ -92,26 +92,29 @@ class ShopAll extends BasePage {
    * Click on a specific category tab by name
    */
   async clickCategoryTab(tabName) {
-    const tab = this.categoryTabButton(tabName);
-    await this.scrollToElement(tab);
-    await this.waitForVisibility(tab);
-    await this.safeClick(tab);
-    await this.page.waitForTimeout(1500); // Wait for products to filter
+   try {
+      const tabButton = this.categoryTabButton(tabName);
+      await this.jsClick(tabButton);
+      await this.page.waitForTimeout(1000); // Wait for content to load
+    } catch (e) {
+      console.error(`clickCategoryTab failed: ${e.message}`);
+      throw e;
+    }
   }
 
   /**
    * Get the currently active category tab name
    */
-  async getActiveTabName() {
-    await this.waitForVisibility(this.activeTab);
-    return await this.scrollAndGetText(this.activeTab);
+  async getActiveTabName(categoryTabName) {
+    await this.waitForVisibility(this.activeTab(categoryTabName));
+    return await this.scrollAndGetText(this.activeTab(categoryTabName));
   }
 
   /**
    * Verify category tab is active by name
    */
   async isTabActive(tabName) {
-    const activeTabName = await this.getActiveTabName();
+    const activeTabName = await this.getActiveTabName(tabName);
     return activeTabName.includes(tabName);
   }
 

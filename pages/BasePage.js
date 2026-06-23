@@ -85,6 +85,7 @@ class BasePage {
   async safeClick(locator) {
     try {
       await locator.click();
+      console.log(`Clicked on element: ${locator}`);
     } catch (e) {
       console.warn(`safeClick failed, trying JS click: ${e.message}`);
       await this.jsClick(locator);

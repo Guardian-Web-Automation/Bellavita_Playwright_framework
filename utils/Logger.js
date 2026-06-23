@@ -2,7 +2,12 @@
 // Structured, colourised logger for Playwright terminal output.
 // Set env var NO_COLOR=1 to strip all ANSI codes (useful for plain CI logs).
 
-const USE_COLOR = process.env.NO_COLOR !== '1';
+// Disable color when: NO_COLOR=1 is set, CI env is detected, or stdout is not a real terminal.
+// Jenkins/GitHub Actions both lack a TTY, so process.stdout.isTTY is undefined there.
+const USE_COLOR =
+  process.env.NO_COLOR !== '1' &&
+  !process.env.CI &&
+  !!process.stdout.isTTY;
 
 const c = USE_COLOR
   ? {

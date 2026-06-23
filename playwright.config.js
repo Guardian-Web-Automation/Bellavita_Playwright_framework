@@ -42,13 +42,15 @@ module.exports = defineConfig({
   // Playwright generates its own HTML report — no Extent needed
   // ============================================================
   reporter: [
-    ['list'],                              // live console output while running
+    // 'dot' in CI keeps logs clean — one character per test, no interleaved step output.
+    // 'list' locally gives the full live step-by-step view.
+    [process.env.CI ? 'dot' : 'list'],
     ['html', {
-      outputFolder: 'reports',            // matches your /reports folder
-      open: 'never',                      // don't auto-open; run `npx playwright show-report` manually
+      outputFolder: 'reports',
+      open: 'never',
     }],
-    // Uncomment below to also get a JUnit XML (useful for some CI dashboards)
-    // ['junit', { outputFile: 'reports/results.xml' }],
+    // JUnit XML lets Jenkins publish test results natively (Post-build action → JUnit plugin).
+    ['junit', { outputFile: 'reports/results.xml' }],
   ],
 
   // ============================================================
