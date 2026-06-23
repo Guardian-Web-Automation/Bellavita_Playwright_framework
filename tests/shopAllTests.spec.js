@@ -19,7 +19,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 1: Verify Shop All page loads with product grid
   // ============================================================
-  test('1- Verify Shop All page loads with product grid', async ({ page }) => {
+  test('@smoke 1- Verify Shop All page loads with product grid', async ({ page }) => {
     Logger.testStart(1, 'Shop All page loads with product grid');
 
     Logger.step('Verifying product grid container visibility');
@@ -41,7 +41,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 2: Verify category filter tabs render (All, Fragrance, Bath & Body, Skincare)
   // ============================================================
-  test('2- Verify category filter tabs render (All, Fragrance, Bath & Body, Skincare)', async ({ page }) => {
+  test('@smoke 2- Verify category filter tabs render (All, Fragrance, Bath & Body, Skincare)', async ({ page }) => {
     Logger.testStart(2, 'Category filter tabs render');
 
     Logger.step('Verifying category tabs container');
@@ -64,7 +64,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 3: Verify clicking a category tab filters the grid
   // ============================================================
-  test('3- Verify clicking a category tab filters the grid', async ({ page }) => {
+  test('@smoke 3- Verify clicking a category tab filters the grid', async ({ page }) => {
     Logger.testStart(3, 'Category tab filters the product grid');
 
     const initialCount = await shopAll.getProductGridCount();
@@ -163,7 +163,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 7: Verify Add to Cart button on product card works for in-stock product
   // ============================================================
-  test('7- Verify Add to Cart button on product card works for in-stock product', async ({ page }) => {
+  test('@smoke 7- Verify Add to Cart button on product card works for in-stock product', async ({ page }) => {
     Logger.testStart(7, 'Add to Cart button works for in-stock product');
 
     const productCount = await shopAll.getProductGridCount();
@@ -225,7 +225,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 9: Verify clicking product card image navigates to PDP
   // ============================================================
-  test('9- Verify clicking product card image navigates to PDP', async ({ page }) => {
+  test('@smoke 9- Verify clicking product card image navigates to PDP', async ({ page }) => {
     Logger.testStart(9, 'Product card image navigates to PDP');
 
     Logger.info('Starting URL', shopAll.getCurrentUrl());
