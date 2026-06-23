@@ -73,7 +73,7 @@ test.describe('GoKwik checkout flow', () => {
         Logger.section('Navigate to PDP');
         Logger.step('Clicking first product to open PDP');
         await shopAll.clickFirstProductToPDP();
-        await page.waitForLoadState('networkidle');
+        await page.waitForLoadState('domcontentloaded');
         Logger.pass('Product Detail Page loaded');
 
         Logger.section('Add to cart from PDP');

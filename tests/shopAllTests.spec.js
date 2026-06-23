@@ -144,7 +144,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 6: Verify Bellacash earning label is visible on product cards
   // ============================================================
-  test.skip('6- Verify Bellacash earning label is visible on product cards', async ({ page }) => {
+  test('6- Verify Bellacash earning label is visible on product cards', async ({ page }) => {
     Logger.testStart(6, 'Bellacash earning label visible on product cards');
 
     Logger.step('Checking Bellacash earning label');
@@ -163,7 +163,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 7: Verify Add to Cart button on product card works for in-stock product
   // ============================================================
-  test.skip('7- Verify Add to Cart button on product card works for in-stock product', async ({ page }) => {
+  test('7- Verify Add to Cart button on product card works for in-stock product', async ({ page }) => {
     Logger.testStart(7, 'Add to Cart button works for in-stock product');
 
     const productCount = await shopAll.getProductGridCount();
@@ -195,7 +195,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 8: Verify SOLD OUT button is disabled and non-clickable
   // ============================================================
-  test.skip('8- Verify SOLD OUT button is disabled and non-clickable', async ({ page }) => {
+  test('8- Verify SOLD OUT button is disabled and non-clickable', async ({ page }) => {
     Logger.testStart(8, 'SOLD OUT button is disabled and non-clickable');
 
     const soldOutCount = await shopAll.getSoldOutButtonCount();
@@ -225,7 +225,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 9: Verify clicking product card image navigates to PDP
   // ============================================================
-  test.skip('9- Verify clicking product card image navigates to PDP', async ({ page }) => {
+  test('9- Verify clicking product card image navigates to PDP', async ({ page }) => {
     Logger.testStart(9, 'Product card image navigates to PDP');
 
     Logger.info('Starting URL', shopAll.getCurrentUrl());
@@ -243,7 +243,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 10: Verify Filter panel opens on clicking Filter icon
   // ============================================================
-  test.skip('10- Verify Filter panel opens on clicking Filter icon', async ({ page }) => {
+  test('10- Verify Filter panel opens on clicking Filter icon', async ({ page }) => {
     Logger.testStart(10, 'Filter panel opens on clicking Filter icon');
 
     Logger.step('Checking Filter button visibility');
@@ -262,7 +262,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 11: Verify Sort panel opens on clicking Sort icon
   // ============================================================
-  test.skip('11- Verify Sort panel opens on clicking Sort icon', async ({ page }) => {
+  test('11- Verify Sort panel opens on clicking Sort icon', async ({ page }) => {
     Logger.testStart(11, 'Sort panel opens on clicking Sort icon');
 
     Logger.step('Checking Sort button visibility');
@@ -281,7 +281,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 12: Verify all filter sections are visible
   // ============================================================
-  test.skip('12- Verify all filter sections are visible', async ({ page }) => {
+  test('12- Verify all filter sections are visible', async ({ page }) => {
     Logger.testStart(12, 'All filter sections are visible');
 
     Logger.step('Opening filter panel');
@@ -303,7 +303,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 13: Verify selecting a Perfume Note filter applies correctly
   // ============================================================
-  test.skip('13- Verify selecting a Perfume Note filter applies correctly', async ({ page }) => {
+  test('13- Verify selecting a Perfume Note filter applies correctly', async ({ page }) => {
     Logger.testStart(13, 'Perfume Note filter applies correctly');
 
     Logger.step('Opening filter panel');
@@ -333,7 +333,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 14: Verify Price range From and To inputs accept values
   // ============================================================
-  test.skip('14- Verify Price range filter From and To inputs accept values', async ({ page }) => {
+  test('14- Verify Price range filter From and To inputs accept values', async ({ page }) => {
     Logger.testStart(14, 'Price range filter inputs accept values');
 
     Logger.step('Opening filter panel');
@@ -357,7 +357,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 15: Verify Price range filter returns products within range
   // ============================================================
-  test.skip('15- Verify Price range filter returns products within the entered range', async ({ page }) => {
+  test('15- Verify Price range filter returns products within the entered range', async ({ page }) => {
     Logger.testStart(15, 'Price range filter returns products within range');
 
     const initialCount = await shopAll.getProductGridCount();
@@ -389,7 +389,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 16: Verify Product Type filter options are visible with counts
   // ============================================================
-  test.skip('16- Verify Product Type filter options are visible with counts', async ({ page }) => {
+  test('16- Verify Product Type filter options are visible with counts', async ({ page }) => {
     Logger.testStart(16, 'Product Type filter options visible with counts');
 
     Logger.step('Opening filter panel');
@@ -415,7 +415,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 17: Verify selecting Product Type filters the grid
   // ============================================================
-  test.skip('17- Verify selecting Product Type filters the grid', async ({ page }) => {
+  test('17- Verify selecting Product Type filters the grid', async ({ page }) => {
     Logger.testStart(17, 'Product Type filter narrows the product grid');
 
     Logger.step('Opening filter panel → selecting "Gift Set" under Product type');
@@ -439,7 +439,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 18: Verify Category filter options are visible with counts
   // ============================================================
-  test.skip('18- Verify Category filter options are visible with counts', async ({ page }) => {
+  test('18- Verify Category filter options are visible with counts', async ({ page }) => {
     Logger.testStart(18, 'Category filter options visible with counts');
 
     Logger.step('Opening filter panel');
@@ -465,7 +465,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 19: Verify selecting a Category filters the grid
   // ============================================================
-  test.skip('19- Verify selecting a Category filters the grid', async ({ page }) => {
+  test('19- Verify selecting a Category filters the grid', async ({ page }) => {
     Logger.testStart(19, 'Category filter narrows the product grid');
 
     const initialCount = await shopAll.getProductGridCount();
@@ -492,7 +492,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 20: Verify Availability In Stock filter removes SOLD OUT products
   // ============================================================
-  test.skip('20- Verify Availability In Stock filter removes SOLD OUT products', async ({ page }) => {
+  test('20- Verify Availability In Stock filter removes SOLD OUT products', async ({ page }) => {
     Logger.testStart(20, 'In Stock filter removes SOLD OUT products');
 
     Logger.step('Opening filter panel → selecting "In stock" availability');
@@ -515,7 +515,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 21: Verify Availability Out of Stock filter shows only SOLD OUT products
   // ============================================================
-  test.skip('21- Verify Availability Out of Stock filter shows only SOLD OUT products', async ({ page }) => {
+  test('21- Verify Availability Out of Stock filter shows only SOLD OUT products', async ({ page }) => {
     Logger.testStart(21, 'Out of Stock filter shows only SOLD OUT products');
 
     Logger.step('Opening filter panel → selecting "Out of stock" availability');
@@ -541,7 +541,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 22: Verify Occasion filter options render with emoji and counts
   // ============================================================
-  test.skip('22- Verify Occasion filter options render with emoji and counts', async ({ page }) => {
+  test('22- Verify Occasion filter options render with emoji and counts', async ({ page }) => {
     Logger.testStart(22, 'Occasion filter options render with emoji and counts');
 
     Logger.step('Opening filter panel → navigating to Occasions section');
@@ -565,7 +565,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 23: Verify selecting an Occasion filter applies correctly
   // ============================================================
-  test.skip('23- Verify selecting an Occasion filter applies correctly', async ({ page }) => {
+  test('23- Verify selecting an Occasion filter applies correctly', async ({ page }) => {
     Logger.testStart(23, 'Occasion filter narrows the product grid');
 
     Logger.step('Opening filter panel → selecting "🍹 Summers" occasion');
@@ -589,7 +589,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 24: Verify Shop Categories filter options are visible
   // ============================================================
-  test.skip('24- Verify Shop Categories filter options are visible', async ({ page }) => {
+  test('24- Verify Shop Categories filter options are visible', async ({ page }) => {
     Logger.testStart(24, 'Shop Categories filter options are visible');
 
     Logger.step('Opening filter panel → navigating to Shop Categories');
@@ -608,7 +608,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 25: Verify selecting Best Sellers shop category filters correctly
   // ============================================================
-  test.skip('25- Verify selecting Best Sellers shop category filters correctly', async ({ page }) => {
+  test('25- Verify selecting Best Sellers shop category filters correctly', async ({ page }) => {
     Logger.testStart(25, 'Best Sellers shop category filters the grid');
 
     Logger.step('Opening filter panel → selecting "Best Sellers"');
@@ -632,7 +632,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 26: Verify multi-filter combination returns intersection results
   // ============================================================
-  test.skip('26- Verify multi-filter combination returns intersection results', async ({ page }) => {
+  test('26- Verify multi-filter combination returns intersection results', async ({ page }) => {
     Logger.testStart(26, 'Multi-filter combination returns intersection results');
 
     Logger.section('Filter 1: Category → Fragrance');
@@ -657,7 +657,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 27: Verify active filter count badge updates on header
   // ============================================================
-  test.skip('27- Verify active filter count badge updates on header', async ({ page }) => {
+  test('27- Verify active filter count badge updates on header', async ({ page }) => {
     Logger.testStart(27, 'Active filter count badge updates on header');
 
     Logger.section('Apply filter 1: Product type → Gift Set');
@@ -681,7 +681,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 28: Verify Apply Filters button activates only after a selection
   // ============================================================
-  test.skip('28- Verify Apply Filters button activates only after a selection', async ({ page }) => {
+  test('28- Verify Apply Filters button activates only after a selection', async ({ page }) => {
     Logger.testStart(28, 'Apply Filters button activates only after a selection');
 
     Logger.step('Opening filter panel');
@@ -704,7 +704,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 29: Verify Reset Filters clears all selections and badge
   // ============================================================
-  test.skip('29- Verify Reset Filters clears all selections and badge', async ({ page }) => {
+  test('29- Verify Reset Filters clears all selections and badge', async ({ page }) => {
     Logger.testStart(29, 'Reset Filters clears all selections and badge');
 
     Logger.section('Setup: apply a filter first');
@@ -734,7 +734,7 @@ test.describe('Shop All Products Page Tests', () => {
   // ============================================================
   // TEST 30: Verify filter panel closes on clicking X
   // ============================================================
-  test.skip('30- Verify filter panel closes on clicking X', async ({ page }) => {
+  test('30- Verify filter panel closes on clicking X', async ({ page }) => {
     Logger.testStart(30, 'Filter panel closes on clicking X');
 
     Logger.step('Opening filter panel');

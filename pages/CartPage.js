@@ -5,7 +5,7 @@ class CartPage {
   constructor(page) {
     if (!page) throw new Error('Page is required');
     this.page = page;
-    this.checkoutButton = page.locator('//div[@class="gokwik-checkout"]/button');
+    this.checkoutButton = page.locator('(//div[@class="gokwik-checkout"]/button)[2]');
     this.cartItems = page.locator('//form[@id="cart"]//cart-items/ul/li');
     this.cartCloseButton = page.locator('//drawer-close-button[@class="header__icon header__icon--summary header__icon--cart"]');
   }
