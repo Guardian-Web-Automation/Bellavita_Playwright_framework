@@ -50,8 +50,7 @@ test.describe('Shop All Products Page Tests', () => {
     Logger.pass('Category tabs container is displayed');
 
     const tabNames = await shopAll.getCategoryTabNames();
-    Logger.info('Tabs found', tabNames);
-
+  
     const expectedTabs = ['All', 'Fragrance', 'Bath & Body', 'Skincare', 'Cosmetics', 'Hair Care', 'Lip Care', 'Skin Care', 'Candles'];
     Logger.step(`Checking each of ${expectedTabs.length} expected tabs`);
     for (const tab of expectedTabs) {
