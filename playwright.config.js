@@ -41,9 +41,10 @@ module.exports = defineConfig({
   // REPORTERS
   // Playwright generates its own HTML report — no Extent needed
   // ============================================================
- reporter: [
-  ['html', { outputFolder: 'playwright-report', open: 'never' }]
-],
+  reporter: [
+    ['html',   { outputFolder: 'playwright-report', open: 'never' }],
+    ['junit',  { outputFile:  'playwright-report/results.xml'     }],
+  ],
 
   // ============================================================
   // SHARED SETTINGS — applied to every project unless overridden
