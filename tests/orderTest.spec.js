@@ -6,16 +6,10 @@ const { GoKwikFramePage } = require('../pages/GoKwikFramePage');
 const { OrderConfirmationPage } = require('../pages/OrderConfirmationPage');
 const { Logger } = require('../utils/Logger');
 
-if (!process.env.TEST_PHONE_NUMBER) {
-  throw new Error(
-    'TEST_PHONE_NUMBER environment variable is not set.\n' +
-    'Local: add TEST_PHONE_NUMBER=your_number to your .env file.\n' +
-    'CI: add TEST_PHONE_NUMBER as a GitHub Actions Secret.'
-  );
-}
-
-const PHONE_NUMBER  = process.env.TEST_PHONE_NUMBER;
-const MASKED_PHONE  = PHONE_NUMBER.slice(0, 2) + '*'.repeat(Math.max(0, PHONE_NUMBER.length - 5)) + PHONE_NUMBER.slice(-3);
+const PHONE_NUMBER = process.env.TEST_PHONE_NUMBER || '';
+const MASKED_PHONE = PHONE_NUMBER
+  ? PHONE_NUMBER.slice(0, 2) + '*'.repeat(Math.max(0, PHONE_NUMBER.length - 5)) + PHONE_NUMBER.slice(-3)
+  : 'NOT_SET';
 
 test.describe('GoKwik checkout flow', () => {
 
@@ -25,6 +19,7 @@ test.describe('GoKwik checkout flow', () => {
     let shopAll;
 
     test.beforeEach(async ({ page }) => {
+        test.skip(!process.env.TEST_PHONE_NUMBER, 'TEST_PHONE_NUMBER not set — skipping checkout tests');
         shopAll = new ShopAll(page);
         await shopAll.navigateTo();
     });
