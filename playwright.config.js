@@ -40,7 +40,10 @@ module.exports = defineConfig({
   projects: [
     {
       name: 'mobile-chrome',
-      use: { ...devices['iPhone 14 Pro'] },
+      use: {
+        ...devices['iPhone 14 Pro'],
+        browserName: 'chromium',   // iPhone 14 Pro defaults to webkit; force chromium
+      },
     },
     // {
     //   name: 'desktop-chrome',
