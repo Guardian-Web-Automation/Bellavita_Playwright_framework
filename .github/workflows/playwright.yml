@@ -2,30 +2,28 @@ name: Playwright Tests
 
 on:
   push:
-    branches:
-      - main
-      - master
-
+    branches: [main, master]
   pull_request:
-    branches:
-      - main
-      - master
-
+    branches: [main, master]
   workflow_dispatch:
+  schedule:
+    - cron: '30 4 * * *'    # 10:00 AM IST  (IST = UTC+5:30)
+    - cron: '30 12 * * *'   # 06:00 PM IST
 
 jobs:
   test:
-    name: Run Playwright Tests
+    name: ${{ github.event_name == 'schedule' && 'Smoke Suite (Scheduled)' || 'Full Suite' }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
     env:
-      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+      CI: true
+      GOOGLE_CLIENT_ID:     ${{ secrets.GOOGLE_CLIENT_ID }}
       GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-      GOOGLE_REDIRECT_URI: ${{ secrets.GOOGLE_REDIRECT_URI }}
+      GOOGLE_REDIRECT_URI:  ${{ secrets.GOOGLE_REDIRECT_URI }}
       GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
-      GOOGLE_ACCESS_TOKEN: ${{ secrets.GOOGLE_ACCESS_TOKEN }}
-      TEST_PHONE_NUMBER: ${{ secrets.TEST_PHONE_NUMBER }}
+      GOOGLE_ACCESS_TOKEN:  ${{ secrets.GOOGLE_ACCESS_TOKEN }}
+      TEST_PHONE_NUMBER:    ${{ secrets.TEST_PHONE_NUMBER }}
 
     steps:
       - name: Checkout Repository
@@ -41,10 +39,37 @@ jobs:
         run: npm ci
 
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+        run: npx playwright install --with-deps chromium
 
+      # Scheduled runs → smoke suite only  |  push/PR → full suite
       - name: Run Playwright Tests
-        run: npx playwright test
+        id: run-tests
+        continue-on-error: true                # allows downstream steps to run even on test failure
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            npx playwright test --grep "@smoke" --grep-invert "@local" --project=mobile-chrome
+          else
+            npx playwright test --grep-invert "@local"
+          fi
+
+      # Reads pass/fail counts from the JUnit XML for the Slack message
+      - name: Parse Test Results
+        if: always()
+        id: results
+        run: |
+          XML="playwright-report/results.xml"
+          if [ -f "$XML" ]; then
+            TOTAL=$(grep -oP 'tests="\K[0-9]+' "$XML" | head -1)
+            FAILED=$(grep -oP 'failures="\K[0-9]+' "$XML" | head -1)
+            SKIPPED=$(grep -oP 'skipped="\K[0-9]+' "$XML" | head -1)
+            TOTAL=${TOTAL:-0}; FAILED=${FAILED:-0}; SKIPPED=${SKIPPED:-0}
+            PASSED=$((TOTAL - FAILED - SKIPPED))
+          else
+            TOTAL=0; PASSED=0; FAILED=0
+          fi
+          echo "total=$TOTAL"   >> $GITHUB_OUTPUT
+          echo "passed=$PASSED" >> $GITHUB_OUTPUT
+          echo "failed=$FAILED" >> $GITHUB_OUTPUT
 
       - name: Upload Playwright Report
         uses: actions/upload-artifact@v4
@@ -61,3 +86,71 @@ jobs:
           name: test-results
           path: test-results/
           retention-days: 30
+
+      # Fail the job after artifacts are safely uploaded
+      - name: Fail job if tests failed
+        if: steps.run-tests.outcome == 'failure'
+        run: exit 1
+
+      # ── Slack notification ─────────────────────────────────────────────────
+      - name: Send Slack Notification
+        if: always()
+        uses: slackapi/slack-github-action@v2.0.0
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            {
+              "attachments": [
+                {
+                  "color": "${{ steps.run-tests.outcome == 'success' && '#27AE60' || '#E74C3C' }}",
+                  "blocks": [
+                    {
+                      "type": "header",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "Bellavita Organic — Playwright Test Report"
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "${{ steps.run-tests.outcome == 'success' && ':white_check_mark: *ALL TESTS PASSED*' || ':x: *TESTS FAILED*' }}"
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "fields": [
+                        { "type": "mrkdwn", "text": "*Total*\n${{ steps.results.outputs.total }}" },
+                        { "type": "mrkdwn", "text": "*Passed*\n${{ steps.results.outputs.passed }}" },
+                        { "type": "mrkdwn", "text": "*Failed*\n${{ steps.results.outputs.failed }}" },
+                        { "type": "mrkdwn", "text": "*Suite*\n${{ github.event_name == 'schedule' && 'Smoke (@smoke)' || 'Full Suite' }}" },
+                        { "type": "mrkdwn", "text": "*Branch*\n${{ github.ref_name }}" },
+                        { "type": "mrkdwn", "text": "*Triggered by*\n${{ github.event_name }}" }
+                      ]
+                    },
+                    {
+                      "type": "actions",
+                      "elements": [
+                        {
+                          "type": "button",
+                          "style": "${{ steps.run-tests.outcome == 'success' && 'primary' || 'danger' }}",
+                          "text": { "type": "plain_text", "text": "View Run & Download Report" },
+                          "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "context",
+                      "elements": [
+                        {
+                          "type": "mrkdwn",
+                          "text": "Device: iPhone 14 Pro — Mobile Chrome | Repo: ${{ github.repository }}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }

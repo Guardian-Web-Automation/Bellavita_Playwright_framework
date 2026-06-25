@@ -1,114 +1,57 @@
 // @ts-check
-require('dotenv').config(); // loads .env for local runs; no-op in CI (env vars injected by Actions)
+require('dotenv').config();
 const { defineConfig, devices } = require('@playwright/test');
 
 module.exports = defineConfig({
 
-  // ============================================================
-  // WHERE TESTS LIVE
-  // ============================================================
-  testDir: './tests',
-
-  // Glob pattern — only files ending in .spec.js are picked up
+  // ── Where tests live ──────────────────────────────────────────
+  testDir:   './tests',
   testMatch: '**/*.spec.js',
 
-  // ============================================================
-  // GLOBAL TEST BEHAVIOUR
-  // ============================================================
+  // ── Global test behaviour ─────────────────────────────────────
+  timeout: 60_000,
+  expect:  { timeout: 10_000 },
 
-  // Max time a single test can take before it is force-failed
-  timeout: 60_000,           // 60 seconds per test
+  retries:        process.env.CI ? 1 : 0,
+  fullyParallel:  false,
+  workers:        process.env.CI ? 2 : 1,
+  maxFailures:    process.env.CI ? 10 : undefined,
 
-  // Max time expect() / assertions wait for a condition to be true
-  expect: {
-    timeout: 10_000,         // 10 seconds
-  },
-
-  // How many times to retry a failed test before marking it failed
-  // 0 in headed/local, 1 in CI (set via env var below)
-  retries: process.env.CI ? 1 : 0,
-
-  // Run test FILES in parallel; tests within a file run serially
-  // (safe default — avoids cart/session conflicts between tests)
-  fullyParallel: false,
-  workers: process.env.CI ? 2 : 1,
-
-  // Fail the whole suite immediately if this many tests fail
-  // Useful in CI to avoid burning time when something is fundamentally broken
-  maxFailures: process.env.CI ? 10 : undefined,
-
-  // ============================================================
-  // REPORTERS
-  // Playwright generates its own HTML report — no Extent needed
-  // ============================================================
+  // ── Reporters ─────────────────────────────────────────────────
   reporter: [
-    ['html',   { outputFolder: 'playwright-report', open: 'never' }],
-    ['junit',  { outputFile:  'playwright-report/results.xml'     }],
+    ['html',  { outputFolder: 'playwright-report', open: 'never' }],
+    ['junit', { outputFile:  'playwright-report/results.xml'     }],
+    ['list'],
   ],
 
-  // ============================================================
-  // SHARED SETTINGS — applied to every project unless overridden
-  // ============================================================
+  // ── Shared settings ───────────────────────────────────────────
   use: {
-    // Base URL — all page.goto('/') calls resolve to this
-    // navigateTo() in BasePage uses '/' which becomes this full URL
-    baseURL: 'https://bellavitaorganic.com',
-
-    // How long to wait for navigation (page.goto, clicks that trigger nav)
+    baseURL:           'https://bellavitaorganic.com',
     navigationTimeout: 30_000,
-
-    // How long individual actions (click, fill, locator.waitFor) wait
-    actionTimeout: 15_000,
-
-    // Always capture a screenshot on failure — saved in test-results/
-    screenshot: 'only-on-failure',
-
-    // Record a video only when a test fails (helps with debugging)
-    video: 'retain-on-failure',
-
-    // Capture a full DOM snapshot on failure (viewable in HTML report)
-    trace: 'retain-on-failure',
-
-    // Always run headless unless you pass --headed flag
-    headless: true,
-
-    // Ignore HTTPS certificate errors (useful for staging/dev environments)
+    actionTimeout:     15_000,
+    screenshot:        'only-on-failure',
+    video:             'retain-on-failure',
+    trace:             'retain-on-failure',
+    headless:          true,
     ignoreHTTPSErrors: true,
   },
 
-  // ============================================================
-  // PROJECTS — Desktop and Mobile
-  // Each project runs the full test suite with its own viewport
-  // ============================================================
+  // ── Projects ──────────────────────────────────────────────────
   projects: [
-
-  {
-  name: 'mobile-chrome',
-  use: {
-    browserName: 'chromium',
-    viewport: { width: 460, height: 740 },
-    isMobile: true,
-    hasTouch: true,
-    deviceScaleFactor: 3,
-  }
-},
-// {
-//     name: 'desktop-chrome',
-//     use: {
-//       browserName: 'chromium',
-//       viewport: { width: 1440, height: 900 },
-//       isMobile: false,
-//       hasTouch: false,
-//     },
-//   },
-
+    {
+      name: 'mobile-chrome',
+      use: { ...devices['iPhone 14 Pro'] },
+    },
+    // {
+    //   name: 'desktop-chrome',
+    //   use: {
+    //     browserName: 'chromium',
+    //     viewport: { width: 1440, height: 900 },
+    //   },
+    // },
   ],
 
-  // ============================================================
-  // OUTPUT FOLDERS
-  // ============================================================
-
-  // Where Playwright puts videos, traces, and screenshots
+  // ── Output folders ────────────────────────────────────────────
   outputDir: 'test-results',
 
 });
