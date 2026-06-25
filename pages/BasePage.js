@@ -59,9 +59,7 @@ class BasePage {
   async scrollToElement(locator) {
     try {
       await locator.scrollIntoViewIfNeeded();
-    } catch (e) {
-      console.warn(`scrollToElement failed: ${e.message}`);
-    }
+    } catch { /* ignore — element may not need scrolling */ }
   }
 
   async scrollToTop() {
@@ -85,9 +83,7 @@ class BasePage {
   async safeClick(locator) {
     try {
       await locator.click();
-      console.log(`Clicked on element: ${locator}`);
     } catch (e) {
-      console.warn(`safeClick failed, trying JS click: ${e.message}`);
       await this.jsClick(locator);
     }
   }
@@ -99,13 +95,8 @@ class BasePage {
    * @param {import('@playwright/test').Locator} locator
    */
   async jsClick(locator) {
-    try {
-      await locator.scrollIntoViewIfNeeded();
-      await locator.evaluate(el => el.click());
-    } catch (e) {
-      console.error(`jsClick failed: ${e.message}`);
-      throw e;
-    }
+    await locator.scrollIntoViewIfNeeded();
+    await locator.evaluate(el => el.click());
   }
 
   /**
@@ -117,7 +108,6 @@ class BasePage {
       await this.scrollToElement(locator);
       await locator.click();
     } catch (e) {
-      console.warn(`scrollAndClick failed, trying JS click: ${e.message}`);
       await this.jsClick(locator);
     }
   }
@@ -135,9 +125,7 @@ class BasePage {
   async waitForVisibility(locator, timeout) {
     try {
       await locator.waitFor({ state: 'visible', timeout: timeout ?? 15_000 });
-    } catch (e) {
-      console.error(`waitForVisibility timed out: ${e.message}`);
-    }
+    } catch { /* caller decides whether to assert */ }
   }
 
   /**
@@ -147,9 +135,7 @@ class BasePage {
   async waitForInvisibility(locator) {
     try {
       await locator.waitFor({ state: 'hidden', timeout: 15_000 });
-    } catch (e) {
-      console.error(`waitForInvisibility timed out: ${e.message}`);
-    }
+    } catch { /* caller decides whether to assert */ }
   }
 
   /**
@@ -168,9 +154,7 @@ class BasePage {
   async waitForPageLoad() {
     try {
       await this.page.waitForLoadState('networkidle', { timeout: 30_000 });
-    } catch (e) {
-      console.warn(`waitForPageLoad timed out, continuing`);
-    }
+    } catch { /* JS-heavy sites often never reach idle; callers should use element waits instead */ }
   }
 
   /**
@@ -194,14 +178,9 @@ class BasePage {
    * @param {string} text
    */
   async typeText(locator, text) {
-    try {
-      await locator.waitFor({ state: 'visible' });
-      await locator.clear();
-      await locator.fill(text);
-    } catch (e) {
-      console.error(`typeText failed: ${e.message}`);
-      throw e;
-    }
+    await locator.waitFor({ state: 'visible' });
+    await locator.clear();
+    await locator.fill(text);
   }
 
   // ==========================================================
@@ -246,7 +225,6 @@ class BasePage {
     try {
       return await this.page.evaluate(script, arg);
     } catch (e) {
-      console.error(`executeJS failed: ${e.message}`);
       return null;
     }
   }
@@ -266,7 +244,6 @@ class BasePage {
       await locator.waitFor({ state: 'visible' });
       return (await locator.textContent()).trim();
     } catch (e) {
-      console.error(`scrollAndGetText failed: ${e.message}`);
       return '';
     }
   }

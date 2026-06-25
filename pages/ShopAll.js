@@ -52,7 +52,7 @@ class ShopAll extends BasePage {
 
   async navigateTo() {
     await super.navigateTo();
-    // await this.waitForPageLoad();
+    await this.waitForVisibility(this.productGridContainer, 30_000);
   }
 
   // ====== PRODUCT GRID VERIFICATION ======
@@ -97,7 +97,6 @@ class ShopAll extends BasePage {
       await this.jsClick(tabButton);
       await this.page.waitForTimeout(1000); // Wait for content to load
     } catch (e) {
-      console.error(`clickCategoryTab failed: ${e.message}`);
       throw e;
     }
   }

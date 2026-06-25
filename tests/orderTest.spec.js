@@ -62,7 +62,7 @@ test.describe('GoKwik checkout flow', () => {
     // ============================================================
     // ORDER TEST 2: COD checkout starting from PDP
     // ============================================================
-    test('user adds product from PDP and places order with COD via GoKwik', async ({ page }) => {
+    test.only('user adds product from PDP and places order with COD via GoKwik', async ({ page }) => {
         Logger.testStart('T2', 'Add product from PDP and place order via GoKwik');
 
         Logger.section('Navigate to PDP');

@@ -2,6 +2,7 @@
 const { google } = require('googleapis');
 const fs   = require('fs');
 const path = require('path');
+const { Logger } = require('./Logger');
 
 const CREDENTIALS_PATH = path.join(process.cwd(), 'credentials.json');
 const TOKEN_PATH       = path.join(process.cwd(), 'token.json');
@@ -78,10 +79,9 @@ async function fetchGokwikOtp({
   const gmail    = await getGmailClient();
   const deadline = Date.now() + maxWaitMs;
 
-  console.log(
-    `Waiting up to ${maxWaitMs / 1000}s for GoKwik OTP email` +
-    (after ? ` (after ${new Date(after).toLocaleTimeString()})` : '') +
-    '...'
+  Logger.step(
+    `Waiting up to ${maxWaitMs / 1000}s for OTP email` +
+    (after ? ` (sent after ${new Date(after).toLocaleTimeString()})` : '')
   );
 
   while (Date.now() < deadline) {
@@ -115,14 +115,11 @@ async function fetchGokwikOtp({
           // This prevents fetching OTPs from previous test runs.
           // ─────────────────────────────────────────────────────────
           if (after && emailTimestamp < after) {
-            console.log(
-              `Skipping stale OTP email from ${new Date(emailTimestamp).toLocaleTimeString()} (before our request)`
-            );
+            Logger.warn(`Stale OTP email skipped (arrived before request time)`);
             continue;
           }
 
           const body = extractEmailBody(msgRes.data);
-          console.log(`Email body: ${body.substring(0, 80)}`);
 
           // GoKwik format: "Use code 3258 for getting your saved addresses"
           const otpMatch =
@@ -131,20 +128,18 @@ async function fetchGokwikOtp({
 
           if (otpMatch) {
             const otp = otpMatch[1];
-            console.log(`OTP found: ${otp} (email time: ${new Date(emailTimestamp).toLocaleTimeString()})`);
+            Logger.pass(`OTP received`);
+            Logger.info('OTP', otp);
             return otp;
           }
 
-          console.log('Email matched but OTP not parsed — trying next...');
+          Logger.warn('OTP email arrived but code not parsed — trying next message');
         }
 
-        console.log('No fresh OTP email yet — waiting...');
-      } else {
-        console.log('No OTP email yet — waiting...');
       }
 
     } catch (err) {
-      console.warn(`Gmail poll error: ${err.message}`);
+      Logger.warn(`Gmail poll error: ${err.message}`);
     }
 
     await new Promise(resolve => setTimeout(resolve, pollIntervalMs));

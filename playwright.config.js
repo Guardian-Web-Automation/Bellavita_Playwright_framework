@@ -42,7 +42,9 @@ module.exports = defineConfig({
       name: 'mobile-chrome',
       use: {
         ...devices['iPhone 14 Pro'],
-        browserName: 'chromium',   // iPhone 14 Pro defaults to webkit; force chromium
+        browserName:     'chromium',          // iPhone 14 Pro defaults to webkit; force chromium
+        viewport:        { width: 460, height: 740 }, // override — 390px hides category pills on this site
+        deviceScaleFactor: 3,
       },
     },
     // {

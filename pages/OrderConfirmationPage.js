@@ -1,4 +1,5 @@
 const { expect } = require('@playwright/test');
+const { Logger } = require('../utils/Logger');
 
 class OrderConfirmationPage {
   /**
@@ -14,7 +15,7 @@ class OrderConfirmationPage {
   async assertOrderSuccess() {
     await this.trackOrderLabel.waitFor({ state: 'visible', timeout: 15_000 });
     expect(await this.trackOrderLabel.isVisible()).toBeTruthy();
-    console.log('Track your order visible ✅');
+    Logger.pass('Track your order visible');
 
     await this.orderIdLabel.waitFor({ state: 'visible', timeout: 15_000 });
     expect(await this.orderIdLabel.isVisible()).toBeTruthy();
